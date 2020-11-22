@@ -1,0 +1,564 @@
+{
+    "$schema": "https://raw.githubusercontent.com/Septh/tmlanguage/master/tmLanguage.schema.json",
+    "scopeName": "source.skriptlang",
+    "uuid": "bdf45b93-232e-475f-8783-cad8f0a82772",
+    "patterns": [
+        {
+            "include": "#code"
+        },
+        {
+            "include": "#triggerNodeNoSpaces"
+        },
+        {
+            "include": "#normalSkriptPattern"
+        },
+        {
+            "include": "#triggerNodeSpaces"
+        }
+    ],
+    "repository": {
+        "code": {
+            "patterns": [
+                {
+                    "include": "#comments"
+                },
+                {
+                    "include": "#keywords"
+                },
+                {
+                    "include": "#function"
+                },
+                {
+                    "include": "#command"
+                },
+                {
+                    "include": "#commandChildrenAliases"
+                },
+                {
+                    "include": "#subTriggers"
+                },
+                {
+                    "include": "#returnTypeTrigger"
+                },
+                {
+                    "include": "#digits"
+                },
+                {
+                    "include": "#strings"
+                },
+                {
+                    "include": "#variables"
+                },
+                {
+                    "include": "#booleans"
+                },
+                {
+                    "include": "#evaluated"
+                },
+                {
+                    "include": "#parsedas"
+                }
+            ]
+        },
+        "parsedas": {
+            "match": "^(function) ([\\w][\\w\\d_]*)\\((.*)\\)(?: :: (.+))?:",
+            "captures": {
+                "1": {
+                    "name": "keyword.other"
+                },
+                "2": {
+                    "name": "entity.name.function"
+                },
+                "3": {
+                    "name": "keyword.operator",
+                    "patterns": [
+                        {
+                            "match": "(?:([^:,\\s]+):\\s?([^:,=]+)(?:\\s?=\\s?([^:,= ]+))?)",
+                            "captures": {
+                                "1": {
+                                    "name": "variable.parameter"
+                                },
+                                "2": {
+                                    "name": "entity.name.type"
+                                },
+                                "3": {
+                                    "patterns": [
+                                        {
+                                            "include": "#code"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "4": {
+                    "name": "entity.name.type"
+                }
+            }
+        },
+        "function": {
+            "match": "^(function) ([\\w][\\w\\d_]*)\\((.*)\\)(?: :: (.+))?:",
+            "captures": {
+                "1": {
+                    "name": "keyword.other"
+                },
+                "2": {
+                    "name": "entity.name.function"
+                },
+                "3": {
+                    "name": "keyword.operator",
+                    "patterns": [
+                        {
+                            "match": "(?:([^:,\\s]+):\\s?([^:,=]+)(?:\\s?=\\s?([^:,= ]+))?)",
+                            "captures": {
+                                "1": {
+                                    "name": "variable.parameter"
+                                },
+                                "2": {
+                                    "name": "entity.name.type"
+                                },
+                                "3": {
+                                    "patterns": [
+                                        {
+                                            "include": "#code"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                "4": {
+                    "name": "entity.name.type"
+                }
+            }
+        },
+        "command": {
+            "match": "(?i)^(command) /?(\\S+)\\s*(\\s+(.+))?:",
+            "captures": {
+                "0": {
+                    "name": "entity.name.function"
+                },
+                "1": {
+                    "name": "keyword.other"
+                },
+                "2": {
+                    "name": "entity.name.type"
+                },
+                "3": {
+                    "patterns": [
+                        {
+                            "match": "\\[?<\\s*(?:(.+?)\\s*:\\s*)?(.+?)\\s*(?:=\\s*([^\"]*?(?:\"[^\"]*?\"[^\"]*?)*?))?\\s*>\\]?",
+                            "captures": {
+                                "0": {
+                                    "name": "entity.name.function"
+                                },
+                                "2": {
+                                    "name": "entity.name.type"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "commandChildrenAliases": {
+            "match": "^(?:\\t|\\s){1,}(aliases:)\\s?(.+)",
+            "captures": {
+                "1": {
+                    "name": "constant.language"
+                },
+                "2": {
+                    "name": "string.unquoted",
+                    "patterns": [
+                        {
+                            "match": "(\\/?)([^,]+)(,\\s)?",
+                            "captures": {
+                                "1": {
+                                    "name": "entity.name.function"
+                                },
+                                "2": {
+                                    "name": "entity.name.type"
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        "subTriggers": {
+            "match": "^(?:\\t|\\s){1,}((?:usage|description|permission|permission message|cooldown|cooldown message|cooldown bypass|cooldown storage|executable by):)\\s?(.+)",
+            "captures": {
+                "1": {
+                    "name": "constant.language"
+                },
+                "2": {
+                    "name": "string.unquoted"
+                }
+            }
+        },
+        "returnTypeTrigger": {
+            "match": "^(?:\\t|\\s){1,}((?:return type):)\\s?(.+)",
+            "captures": {
+                "1": {
+                    "name": "constant.language"
+                },
+                "2": {
+                    "name": "entity.name.type"
+                }
+            }
+        },
+        "packageNameImport": {
+            "match": "((?:\\.?[a-zA-Z_]+){1,})\\.([a-zA-Z_]+)$",
+            "name": "keyword.control",
+            "captures": {
+                "1": {
+                    "patterns": [
+                        {
+                            "match": "[^\\.]",
+                            "name": "variable.other.java.package"
+                        }
+                    ]
+                },
+                "2": {
+                    "name": "entity.name.type"
+                }
+            }
+        },
+        "mirrorCallInvoke": {
+            "match": "\\.(\\b\\w+\\b\\s*)(?:\\(\\)|\\((.+?)\\))",
+            "captures": {
+                "1": {
+                    "name": "variable.other.java"
+                },
+                "2": {
+                    "patterns": [
+                        {
+                            "include": "#code"
+                        }
+                    ]
+                }
+            }
+        },
+        "digits": {
+            "name": "constant.numeric",
+            "match": "-?\\d+(?:\\.\\d+)?"
+        },
+        "comments": {
+            "begin": "#",
+            "end": "$",
+            "name": "comment.line",
+            "patterns": [
+                {
+                    "comment": "Documentation style #1 - Red",
+                    "match": "(?:\\s)*(#!\\s?.+)",
+                    "captures": {
+                        "1": {
+                            "name": "invalid.illegal"
+                        }
+                    }
+                },
+                {
+                    "comment": "Documentation style #1 - Code",
+                    "match": "(?:\\s)*#\\?\\s?(.+)",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "include": "#variables"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "match": "(?:\\s)*(.+)",
+                    "captures": {
+                        "1": {
+                            "patterns": [
+                                {
+                                    "comment": "Valid SkriptDoc declarations",
+                                    "match": "(@(?:doc|returns|since)) (.+)",
+                                    "captures": {
+                                        "1": {
+                                            "name": "keyword.other"
+                                        },
+                                        "2": {
+                                            "name": "string.unquoted"
+                                        }
+                                    }
+                                },
+                                {
+                                    "comment": "Invalid SkriptDoc declarations",
+                                    "match": "(@(?:doc|returns|since) ?$)",
+                                    "captures": {
+                                        "1": {
+                                            "name": "invalid.illegal"
+                                        }
+                                    }
+                                },
+                                {
+                                    "comment": "Valid SkriptDoc declaration",
+                                    "match": "(@param) (\\S+) (.+)",
+                                    "captures": {
+                                        "1": {
+                                            "name": "keyword.other"
+                                        },
+                                        "2": {
+                                            "name": "variable.parameter"
+                                        },
+                                        "3": {
+                                            "name": "string.unquoted"
+                                        }
+                                    }
+                                },
+                                {
+                                    "comment": "Invalid SkriptDoc declaration",
+                                    "match": "(@param (\\S+) ?$)",
+                                    "captures": {
+                                        "1": {
+                                            "name": "invalid.illegal"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        "evaluated": {
+            "begin": "%",
+            "beginCaptures": {
+                "0": {
+                    "name": "keyword.other"
+                }
+            },
+            "end": "%",
+            "endCaptures": {
+                "0": {
+                    "name": "keyword.other"
+                }
+            },
+            "name": "storage.type",
+            "patterns": [
+                {
+                    "include": "#variables"
+                }
+            ]
+        },
+        "keywords": {
+            "patterns": [
+                {   
+                    "name": "keyword.other",
+                    "match": "(?i)\\b(?:if|loop(?!-)|while|else|add|remove|set(?!:)|to|is|is(?:n'| no)t|return)\\b"
+                }
+            ]
+        },
+        "triggerNodeNoSpaces": {
+            "match": "^(?:\\s|\\t)*([^\\s:]+:)$",
+            "captures": {
+                "1": {
+                    "name": "constant.language"
+                }
+            }
+        },
+        "normalSkriptPattern": {
+            "match": "^(?:\\s|\\t)*(.+)(?<!:)$",
+            "captures": {
+                "1": {
+                    "name": "entity.name.function skriptlang.normal.pattern",
+                    "patterns": [
+                        {
+                            "include": "#code"
+                        },
+                        {
+                            "include": "#mirrorCallInvoke"
+                        }
+                    ]
+                },
+                "2": {
+                    "name": "constant.language"
+                }
+            }
+        },
+        "triggerNodeSpaces": {
+            "match": "^((?:[^:]|:(?!$))+:)$",
+            "captures": {
+                "1": {
+                    "name": "entity.name.function skriptlang.trigger.node.spaces",
+                    "patterns": [
+                        {
+                            "match": "^(expression|effect) (.+)?:$",
+                            "captures": {
+                                "1": {
+                                    "name": "keyword.other"
+                                },
+                                "2": {
+                                    "patterns": [
+                                        {"include": "#pattern-code"}
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "include": "#code"
+                        },
+                        {
+                            "include": "#normalSkriptPattern"
+                        }
+                    ]
+                }
+            }
+        },
+        "options": {
+            "patterns": [
+                {
+                    "name": "constant.language",
+                    "match": "\\{@[^\\}]+\\}"
+                }
+            ]
+        },
+        "strings": {
+            "patterns": [
+                {
+                    "begin": "\"",
+                    "end": "\"",
+                    "name": "string.quoted.double",
+                    "patterns": [
+                        {
+                            "include": "#options"
+                        },
+                        {
+                            "include": "#evaluated"
+                        }
+                    ]
+                }
+            ]
+        },
+        "booleans": {
+            "patterns": [
+                {
+                    "name": "constant.language",
+                    "match": "\\b(true|false)\\b"
+                }
+            ]
+        },
+        "variables": {
+            "patterns": [
+                {
+                    "name": "variable.other",
+                    "begin": "(?:(?:the )?var(?:iable)? )?\\{",
+                    "end": "\\}",
+                    "patterns": [
+                        {
+                            "include": "#evaluated"
+                        }
+                    ]
+                }
+            ]
+        },
+        "pattern-code": {
+            "patterns": [
+                {
+                    "include": "#pattern-evaluated"
+                },
+                {
+                    "include": "#pattern-optional"
+                },
+                {
+                    "include": "#pattern-group"
+                },
+                {
+                    "include": "#pattern-regex"
+                },
+                {
+                    "match": ".",
+                    "name": "variable.other"
+                }
+            ]
+        },
+        "pattern-evaluated": {
+            "match": "%(.+?)%",
+            "captures": {
+                "0": {
+                    "name": "keyword.other"
+                },
+                "1": {
+                    "patterns": [
+                        {
+                            "match": "[^\/]",
+                            "name": "entity.name.type"
+                        },
+                        {
+                            "match": "\/",
+                            "name": "keyword.control"
+                        }
+                    ]
+                }
+            }
+        },
+        "pattern-optional":{
+            "match": "\\[(.+?)\\]",
+            "captures": {
+                "0": {
+                    "name": "entity.name.function"
+                },
+                "1": {
+                    "name": "variable.other",
+                    "patterns": [
+                        {
+                            "include": "#pattern-code"
+                        }
+                    ]
+                }
+            }
+        },
+        "pattern-regex":{
+            "match": "\\<(.+?)\\>",
+            "captures": {
+                "0": {
+                    "name": "entity.name.function"
+                },
+                "1": {
+                    "name": "variable.other",
+                    "patterns": [
+                        {
+                            "include": "#pattern-code"
+                        }
+                    ]
+                }
+            }
+        },
+        "pattern-group":{
+            "match": "\\((.+?)\\)",
+            "captures": {
+                "0": {
+                    "name": "entity.name.type"
+                },
+                "1": {
+                    "name": "variable.other",
+                    "patterns": [
+                        {
+                            "match": "(\\d+)¦",
+                            "name": "keyword.control",
+                            "captures": {
+                                "1": {
+                                    "name": "constant.numeric"
+                                }
+                            }
+                        },
+                        {
+                            "match": "\\|",
+                            "name": "keyword.control"
+                        },
+                        {
+                            "include": "#pattern-code"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}
